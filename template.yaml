@@ -4,7 +4,7 @@ metadata:
   name: aks-cluster
   title: Simple AKS Cluster
   links:
-    - url: github.com
+    - url: https://github.com
       title: GitHub
   description: Creates an AKS cluster
   labels:
