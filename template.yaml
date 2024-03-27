@@ -2,7 +2,6 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: aks-cluster
-  link: github.com
   title: Simple AKS Cluster
   description: Creates an AKS cluster
   labels:
