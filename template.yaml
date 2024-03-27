@@ -3,6 +3,8 @@ kind: Template
 metadata:
   name: aks-cluster
   title: Simple AKS Cluster
+  links:
+    - github.com
   description: Creates an AKS cluster
   labels:
     dna.template/is-public: yes
