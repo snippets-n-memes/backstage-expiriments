@@ -1,0 +1,96 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: aks-cluster
+  title: Simple AKS Cluster
+  description: Creates an AKS cluster
+  labels:
+    dna.template/is-public: yes
+  tags:
+    - recommended
+    - terraform-sample
+    - kubernetes
+spec:
+  owner: user:michael-mcmullen_boxboat
+  type: aks-cluster
+  parameters:
+  - title: Provide some information
+    required:
+      - resource_group_name
+      - node_resource_group_name
+      - cluster_name
+      - kubernetes_version
+      - dns_prefix
+    properties:
+      system:
+        title: System (optional)
+        description: System entity this cluster is a component of (defaults to sandbox)
+        default: "system:sandbox"
+        ui:field: EntityPicker
+        ui:options:
+          catalogFilter:
+          - kind: System
+      resource_group_name:
+        title: Resource Group Name
+        type: string
+        description: The resource group that will be created to deploy the cluster into
+      node_resource_group_name:
+        title: Node Resource Group Name
+        type: string
+        description: The resource group created to hold the backend Azure networking resources
+      cluster_name:
+        title: AKS Cluster Name
+        type: string
+        description: The name of the cluster
+      kubernetes_version:
+        title: Kubernetes Version
+        type: string
+        description: Available Kubernetes versions for AKS
+        default: 1.27.7
+        enum:
+          - 1.28.3
+          - 1.28.0
+          - 1.27.7
+          - 1.27.3
+          - 1.26.10
+          - 1.26.6
+      dns_prefix:
+        title: dns prefix
+        type: string  
+
+  steps:
+    - id: template_skeleton
+      name: Fetch Skeleton
+      action: fetch:template
+      input:
+        url: ./skeleton
+        targetPath: skeleton
+        values:
+          rg_name: ${{ parameters.resource_group_name }}
+          node_resource_group: ${{ parameters.node_resource_group_name }}
+          aks_name: ${{ parameters.cluster_name }}
+          aks_k8s_version: ${{ parameters.kubernetes_version }}
+          dns_prefix: ${{ parameters.dns_prefix }}
+          owner: ${{ user.entity.metadata.name }}
+          system: ${{ parameters.system }}
+
+    - id: publish_pr
+      name: Open Pull-Request
+      action: publish:github:pull-request
+      input:
+        repoUrl: "github.com/snippets-n-memes"
+        branchName: "add-aks-cluster-${{ parameters.cluster_name }}"
+        title: "AKS-Simple ${{ parameters.cluster_name }}"
+        description: |
+          This pull-request creates an AKS cluster called **${{ parameters.cluster_name }}**.
+
+          :eyes: The Terraform plan will run automatically. 
+          
+          :white_check_mark: If the plan looks good, then **merging** the PR will apply the Terraform and create the cluster.
+        sourcePath: ./skeleton
+        targetPath: ./aks-simple/${{ parameters.cluster_name }}
+    
+  output:
+    links:
+      - title: View pull-request
+        url: ${{ steps.publish_pr.output.remoteUrl }}
