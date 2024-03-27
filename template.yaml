@@ -6,6 +6,8 @@ metadata:
   links:
     - url: https://github.com
       title: GitHub
+  annotations:
+    infracost/base-cost: 208.00
   description: Creates an AKS cluster
   labels:
     dna.template/is-public: yes
