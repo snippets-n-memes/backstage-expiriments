@@ -4,7 +4,8 @@ metadata:
   name: aks-cluster
   title: Simple AKS Cluster
   links:
-    - github.com
+    - url: github.com
+      title: GitHub
   description: Creates an AKS cluster
   labels:
     dna.template/is-public: yes
